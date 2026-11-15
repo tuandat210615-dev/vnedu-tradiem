@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vnsEdu | Cổng thông tin giáo dục & Tra cứu kết quả học tập</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --blue: #0868bd;
+            --blue2: #054884;
+            --blue-soft: #e3f2fd;
+            --blue-hover: #06559a;
+            --bg: #f4f6f9;
+            --surface: #ffffff;
+            --surface-card: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #cbd5e1;
+            --border-light: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 24px -6px rgba(8, 104, 189, 0.14);
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --radius: 14px;
+            --radius-sm: 8px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark {
+            --blue: #3b82f6;
+            --blue2: #60a5fa;
+            --blue-soft: rgba(59, 130, 246, 0.15);
+            --blue-hover: #2563eb;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-card: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --border-light: #334155;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 12px 24px -6px rgba(0,0,0,0.45);
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --danger-bg: rgba(239, 68, 68, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* LOGO SVG STYLING */
+        .vns-logo-svg {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* LOGIN SCREEN */
+        #loginView {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(8, 104, 189, 0.92), rgba(5, 72, 132, 0.96)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--surface);
+            width: 100%;
+            max-width: 430px;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            padding: 40px 36px;
+            border: 1px solid var(--border-light);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .login-logo-wrap {
+            margin: 0 auto 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background: var(--blue-soft);
+            border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(8, 104, 189, 0.12);
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .login-title span {
+            color: var(--blue);
+        }
+
+        .login-subtitle {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: var(--text);
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-with-icon i.field-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-soft);
+            background: var(--surface);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-label input {
+            accent-color: var(--blue);
+            width: 16px;
+            height: 16px;
+        }
+
+        .forgot-link {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--blue), var(--blue2));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(8, 104, 189, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(8, 104, 189, 0.35);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-light);
+            box-shadow: none;
+        }
+
+        .alert-box {
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* MAIN APP LAYOUT */
+        #appView {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text h1 span {
+            color: var(--blue);
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background: var(--blue-soft);
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .account-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 14px 5px 6px;
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--blue2));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .account-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .account-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .account-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* TABS - CHỈ HIỆN CHO GV / QTV */
+        .role-tabs {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 24px;
+            display: none;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            padding: 12px 18px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--blue);
+        }
+
+        .tab-btn.active {
+            color: var(--blue);
+            border-bottom-color: var(--blue);
+        }
+
+        /* CONTAINER & LAYOUT */
+        .container {
+            max-width: 1360px;
+            margin: 24px auto;
+            padding: 0 24px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 24px;
+        }
+
+        @media(max-width: 992px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--surface-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--blue);
+        }
+
+        /* FILTERS & SEARCH */
+        .search-box {
+            position: relative;
+            margin-bottom: 14px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: var(--blue);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .filter-list {
+            list-style: none;
+            max-height: 440px;
+            overflow-y: auto;
+        }
+
+        .filter-item {
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .filter-item:hover {
+            background: var(--bg);
+        }
+
+        .filter-item.active {
+            background: var(--blue-soft);
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        /* TABLES & GRADES */
+        .grade-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .student-badge h2 {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .student-badge p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .term-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pill-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .pill-btn.active {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+            box-shadow: 0 2px 6px rgba(8, 104, 189, 0.25);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        th {
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--text);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        tr:hover td {
+            background: var(--bg);
+        }
+
+        .tx-group {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .score-high { background: var(--success-bg); color: var(--success); }
+        .score-mid { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .score-tx { background: var(--blue-soft); color: var(--blue); }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .action-btn {
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            background: var(--blue-soft);
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        /* PROGRESS CHART BAR */
+        .progress-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .progress-label {
+            width: 130px;
+            font-weight: 600;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 10px;
+            background: var(--bg);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue), #38bdf8);
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-val {
+            width: 40px;
+            text-align: right;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        /* ADMIN MANAGEMENT TABLE & MODALS */
+        .admin-table th, .admin-table td {
+            font-size: 13px;
+        }
+
+        .badge-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-active { background: var(--success-bg); color: var(--success); }
+        .badge-locked { background: var(--danger-bg); color: var(--danger); }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            width: 100%;
+            max-width: 480px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 28px;
+            border: 1px solid var(--border-light);
+            animation: fadeIn 0.25s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card h3 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            letter-spacing: 0.03em;
+        }
+
+        .stat-card .value {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body { background: white; color: black; }
+            header, .role-tabs, .toolbar-actions, .filter-list, .search-box, .card-title button, #progressChartCard { display: none !important; }
+            .card { border: none; box-shadow: none; padding: 0; }
+            .layout-grid { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP -->
+    <div id="loginView">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo-wrap">
+                    <!-- LOGO GỐC VNSEDU (SVG) -->
+                    <svg class="vns-logo-svg" width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="64" height="64" rx="16" fill="url(#vnsGradLogin)"/>
+                        <path d="M32 14L10 25L32 36L54 25L32 14Z" fill="white"/>
+                        <path d="M18 31V42C18 42 23 48 32 48C41 48 46 42 46 42V31L32 38L18 31Z" fill="white" fill-opacity="0.9"/>
+                        <path d="M50 27V39" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="50" cy="41" r="2.5" fill="#FBBF24"/>
+                        <defs>
+                            <linearGradient id="vnsGradLogin" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#0868BD"/>
+                                <stop offset="1" stop-color="#043B6E"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h2 class="login-title">vns<span>Edu</span></h2>
+                <p class="login-subtitle">Cổng thông tin giáo dục & Tra cứu kết quả học tập</p>
+            </div>
+
+            <div id="loginAlert" class="alert-box alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="loginAlertText">Tên đăng nhập hoặc mật khẩu không chính xác!</span>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Tên tài khoản</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="usernameInput" class="form-control" placeholder="Nhập tên đăng nhập..." required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="passwordInput" class="form-control" placeholder="Nhập mật khẩu..." required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('passwordInput', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="login-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe"> Ghi nhớ đăng nhập
+                    </label>
+                    <a href="#" class="forgot-link" onclick="showForgotPasswordModal(event)">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH KHÔI PHỤC MẬT KHẨU (QUÊN MẬT KHẨU) -->
+    <div id="forgotPasswordModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-key" style="color: var(--blue);"></i> Khôi phục mật khẩu</h3>
+                <button class="close-modal" onclick="closeForgotPasswordModal()">&times;</button>
+            </div>
+            <div id="forgotAlert" class="alert-box alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="forgotAlertText"></span>
+            </div>
+            <div id="forgotSuccess" class="alert-box alert-success">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="forgotSuccessText"></span>
+            </div>
+            <form onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label class="form-label">Tên tài khoản</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="fgUsername" class="form-control" placeholder="Nhập tên tài khoản của bạn..." required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu mới</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="fgNewPass" class="form-control" placeholder="Nhập mật khẩu mới..." required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('fgNewPass', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Xác nhận mật khẩu mới</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="fgConfirmPass" class="form-control" placeholder="Nhập lại mật khẩu mới..." required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('fgConfirmPass', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <p style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 18px; font-style: italic;">
+                    * Lưu ý: Đây là chức năng đặt lại mật khẩu thử nghiệm trên bản DEMO HTML, không yêu cầu xác minh email/số điện thoại.
+                </p>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeForgotPasswordModal()">Quay lại đăng nhập</button>
+                    <button type="submit" class="btn">Xác nhận đổi mật khẩu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GIAO DIỆN CHÍNH (APP VIEW) -->
+    <div id="appView" style="display: none;">
+        <header>
+            <div class="brand">
+                <!-- LOGO GỐC VNSEDU TRÊN HEADER -->
+                <svg class="vns-logo-svg" width="42" height="42" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="64" height="64" rx="14" fill="url(#vnsGradHeader)"/>
+                    <path d="M32 14L10 25L32 36L54 25L32 14Z" fill="white"/>
+                    <path d="M18 31V42C18 42 23 48 32 48C41 48 46 42 46 42V31L32 38L18 31Z" fill="white" fill-opacity="0.9"/>
+                    <path d="M50 27V39" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="41" r="2.5" fill="#FBBF24"/>
+                    <defs>
+                        <linearGradient id="vnsGradHeader" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0868BD"/>
+                            <stop offset="1" stop-color="#043B6E"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="brand-text">
+                    <h1>vns<span>Edu</span></h1>
+                    <p>Cổng thông tin giáo dục & Tra cứu kết quả học tập</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleDarkMode()" title="Chuyển đổi giao diện Sáng/Tối">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <div class="account-box">
+                    <div class="avatar" id="headerAvatar">HS</div>
+                    <div class="account-info">
+                        <span class="account-name" id="headerName">Học sinh</span>
+                        <span class="account-role" id="headerRoleBadge">Học sinh</span>
+                    </div>
+                </div>
+                <button class="icon-btn" onclick="handleLogout()" title="Đăng xuất">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- THANH ĐIỀU HƯỚNG VAI TRÒ (CHỈ HIỂN THỊ KHI TÀI KHOẢN LÀ GIÁO VIÊN HOẶC QUẢN TRỊ VIÊN) -->
+        <div class="role-tabs" id="roleTabsContainer"></div>
+
+        <div class="container">
+            <!-- TAB 1: HỌC SINH -->
+            <div id="studentTab" class="role-content">
+                <div class="layout-grid">
+                    <!-- Sidebar chọn môn -->
+                    <div class="card">
+                        <h3 class="card-title"><i class="fa-solid fa-book-open"></i> Danh sách môn học</h3>
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="subjectSearchInput" placeholder="Tìm kiếm môn học..." onkeyup="filterSubjects()">
+                        </div>
+                        <ul class="filter-list" id="studentSubjectList">
+                            <li class="filter-item active" onclick="selectSubject('all', this)"><span>Tất cả môn học</span> <i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+                            <li class="filter-item" onclick="selectSubject('Ngữ văn', this)"><span>Ngữ văn</span></li>
+                            <li class="filter-item" onclick="selectSubject('Toán', this)"><span>Toán</span></li>
+                            <li class="filter-item" onclick="selectSubject('Tiếng Anh', this)"><span>Tiếng Anh</span></li>
+                            <li class="filter-item" onclick="selectSubject('KHTN', this)"><span>Khoa học tự nhiên</span></li>
+                            <li class="filter-item" onclick="selectSubject('Lịch sử & Địa lý', this)"><span>Lịch sử & Địa lý</span></li>
+                            <li class="filter-item" onclick="selectSubject('Tin học', this)"><span>Tin học</span></li>
+                            <li class="filter-item" onclick="selectSubject('Công nghệ', this)"><span>Công nghệ</span></li>
+                            <li class="filter-item" onclick="selectSubject('GDCD', this)"><span>Giáo dục công dân</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Bảng điểm chi tiết -->
+                    <div>
+                        <div class="card">
+                            <div class="grade-header-info">
+                                <div class="student-badge">
+                                    <h2 id="displayStudentTitle">BẢNG ĐIỂM HỌC TẬP – HOÀNG TUẤN ĐẠT</h2>
+                                    <p id="displayStudentMeta">Lớp: 6D | Trường THCS Hùng Vương | Năm học: 2026 - 2027</p>
+                                </div>
+                                <div class="term-selector">
+                                    <button class="pill-btn active" onclick="switchTerm('GHK1', this)">Giữa HK1</button>
+                                    <button class="pill-btn" onclick="switchTerm('HK1', this)">Cuối HK1</button>
+                                    <button class="pill-btn" onclick="switchTerm('GHK2', this)">Giữa HK2</button>
+                                    <button class="pill-btn" onclick="switchTerm('HK2', this)">Cuối HK2</button>
+                                </div>
+                            </div>
+
+                            <div class="toolbar-actions">
+                                <button class="action-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> In bảng điểm</button>
+                                <button class="action-btn" onclick="exportCSV()"><i class="fa-solid fa-file-excel"></i> Xuất CSV</button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="gradeTable">
+                                    <thead>
+                                        <tr id="tableHeaderRow">
+                                            <th>Môn học</th>
+                                            <th>Kiểm tra thường xuyên (2 cột)</th>
+                                            <th>Điểm Giữa kỳ</th>
+                                            <th>Điểm Cuối kỳ</th>
+                                            <th>TB Môn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="gradeTableBody">
+                                        <!-- Dữ liệu render bằng JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Thống kê học tập -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>ĐIỂM TRUNG BÌNH HỌC KỲ</h3>
+                                <div class="value" id="statAvgScore">8.8</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>XẾP LOẠI HỌC TẬP</h3>
+                                <div class="value" id="statRank" style="color: var(--success);">TỐT</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>TỶ LỆ CHUYÊN CẦN</h3>
+                                <div class="value">100%</div>
+                            </div>
+                        </div>
+
+                        <!-- Biểu đồ tiến độ điểm số -->
+                        <div class="card" id="progressChartCard">
+                            <h3 class="card-title"><i class="fa-solid fa-chart-simple"></i> Biểu đồ tiến độ điểm số các môn</h3>
+                            <div class="progress-list" id="progressBarsContainer">
+                                <!-- Render bằng JS -->
+                            </div>
+                        </div>
+
+                        <!-- Nhận xét của giáo viên -->
+                        <div class="card">
+                            <h3 class="card-title"><i class="fa-solid fa-comment-dots"></i> Nhận xét của Giáo viên chủ nhiệm</h3>
+                            <p id="teacherComment" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                                Học sinh có tinh thần tự giác cao trong học tập, hoàn thành xuất sắc nhiệm vụ được giao, tích cực phát biểu xây dựng bài trong các giờ học.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: GIÁO VIÊN -->
+            <div id="teacherTab" class="role-content" style="display: none;">
+                <div class="card">
+                    <h3 class="card-title"><i class="fa-solid fa-chalkboard"></i> Sổ điểm lớp 6D - Trường THCS Hùng Vương</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                        Danh sách học sinh trong lớp. Giáo viên có thể tra cứu chi tiết bảng điểm từng học sinh.
+                    </p>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã HS (Student ID)</th>
+                                    <th>Họ và tên học sinh</th>
+                                    <th>Tổ</th>
+                                    <th>TB Học kỳ</th>
+                                    <th>Hạnh kiểm</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacherStudentListBody">
+                                <!-- Render danh sách học sinh -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: QUẢN TRỊ VIÊN -->
+            <div id="adminTab" class="role-content" style="display: none;">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                        <div>
+                            <h3 class="card-title" style="margin-bottom: 4px;"><i class="fa-solid fa-users-gear"></i> Quản lý Tài khoản Hệ thống</h3>
+                            <p style="font-size: 13px; color: var(--text-secondary);">Quản trị viên tạo, chỉnh sửa, đặt lại mật khẩu, khóa/mở khóa hoặc xóa tài khoản học sinh, giáo viên.</p>
+                        </div>
+                        <button class="action-btn" onclick="openCreateAccountModal()" style="background: var(--blue); color: white; border-color: var(--blue);">
+                            <i class="fa-solid fa-user-plus"></i> Tạo tài khoản mới
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ và tên</th>
+                                    <th>Vai trò</th>
+                                    <th>Mã liên kết (Student ID)</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminAccountsTableBody">
+                                <!-- Render danh sách tài khoản -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TẠO / CHỈNH SỬA TÀI KHOẢN (DÀNH CHO QTV) -->
+    <div id="accountModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="accountModalTitle">Tạo tài khoản mới</h3>
+                <button class="close-modal" onclick="closeAccountModal()">&times;</button>
+            </div>
+            <div id="modalAlert" class="alert-box alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="modalAlertText"></span>
+            </div>
+            <form id="accountForm" onsubmit="saveAccount(event)">
+                <input type="hidden" id="editOriginalUsername">
+                <div class="form-group">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="accUsername" class="form-control" placeholder="Nhập tên đăng nhập..." required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Họ và tên hiển thị</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-id-card field-icon"></i>
+                        <input type="text" id="accFullname" class="form-control" placeholder="Nhập họ và tên..." required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mật khẩu</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="accPassword" class="form-control" placeholder="Nhập mật khẩu..." required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('accPassword', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Xác nhận mật khẩu</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="accConfirmPassword" class="form-control" placeholder="Nhập lại mật khẩu..." required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('accConfirmPassword', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vai trò tài khoản</label>
+                    <select id="accRole" class="form-control" style="padding-left: 14px;" onchange="handleRoleSelectChange()">
+                        <option value="student">Học sinh</option>
+                        <option value="teacher">Giáo viên</option>
+                        <option value="admin">Quản trị viên</option>
+                    </select>
+                </div>
+                <div class="form-group" id="studentIdGroup">
+                    <label class="form-label">Mã liên kết hồ sơ học sinh (Student ID)</label>
+                    <input type="text" id="accStudentId" class="form-control" style="padding-left: 14px;" placeholder="Ví dụ: HS01, HS13...">
+                    <small style="color: var(--text-secondary); font-size: 11.5px; margin-top: 4px; display: block;">Bắt buộc đối với tài khoản học sinh để liên kết đúng bảng điểm.</small>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 22px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeAccountModal()">Hủy</button>
+                    <button type="submit" class="btn">Lưu tài khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /* DỮ LIỆU TÀI KHOẢN (KHÔNG LƯU MẬT KHẨU THUẦN TRỰC TIẾP TRONG STORAGE - SỬ DỤNG MÃ HÓA CƠ BẢN DEMO) */
+        function encodeSecret(str) {
+            return btoa(unescape(encodeURIComponent('vns_' + str)));
+        }
+
+        const defaultAccounts = [
+            { username: 'h.tuan.dat.dk35', passToken: encodeSecret('123456'), fullName: 'Hoàng Tuấn Đạt', role: 'student', studentId: 'HS01', status: 'active' },
+            { username: 'nguyen.van.a', passToken: encodeSecret('123456'), fullName: 'Nguyễn Văn A', role: 'student', studentId: 'HS13', status: 'active' },
+            { username: 'co.huong', passToken: encodeSecret('123456'), fullName: 'Cô Hường', role: 'teacher', studentId: '', status: 'active' },
+            { username: 'admin', passToken: encodeSecret('123456'), fullName: 'Quản trị viên', role: 'admin', studentId: '', status: 'active' }
+        ];
+
+        let accounts = JSON.parse(localStorage.getItem('vnsedu_accounts_v2')) || defaultAccounts;
+
+        // Dữ liệu học sinh & bảng điểm chi tiết theo studentId (Mỗi môn chỉ có đúng 2 điểm Kiểm tra thường xuyên)
+        let studentsData = {
+            'HS01': {
+                name: 'HOÀNG TUẤN ĐẠT',
+                className: '6D',
+                school: 'Trường THCS Hùng Vương',
+                year: '2026 - 2027',
+                avgScore: 8.9,
+                rank: 'TỐT',
+                comment: 'Học sinh có tinh thần tự giác cao trong học tập, hoàn thành xuất sắc nhiệm vụ Tổ trưởng Tổ 3, tích cực phát biểu xây dựng bài trong các giờ học.',
+                grades: {
+                    'GHK1': [
+                        { subject: 'Ngữ văn', tx: [8.5, 9.0], mid: 8.5 },
+                        { subject: 'Toán', tx: [9.0, 9.5], mid: 9.0 },
+                        { subject: 'Tiếng Anh', tx: [9.5, 10.0], mid: 9.8 },
+                        { subject: 'KHTN', tx: [8.0, 8.5], mid: 8.8 },
+                        { subject: 'Lịch sử & Địa lý', tx: [8.5, 8.0], mid: 8.5 },
+                        { subject: 'Tin học', tx: [9.0, 9.0], mid: 9.2 },
+                        { subject: 'Công nghệ', tx: [8.5, 9.0], mid: 8.8 },
+                        { subject: 'GDCD', tx: [9.0, 9.5], mid: 9.0 }
+                    ],
+                    'HK1': [
+                        { subject: 'Ngữ văn', tx: [8.5, 9.0], mid: 8.5, final: 8.8, avg: 8.7 },
+                        { subject: 'Toán', tx: [9.0, 9.5], mid: 9.0, final: 9.2, avg: 9.1 },
+                        { subject: 'Tiếng Anh', tx: [9.5, 10.0], mid: 9.8, final: 9.5, avg: 9.6 },
+                        { subject: 'KHTN', tx: [8.0, 8.5], mid: 8.8, final: 8.5, avg: 8.5 },
+                        { subject: 'Lịch sử & Địa lý', tx: [8.5, 8.0], mid: 8.5, final: 8.6, avg: 8.5 },
+                        { subject: 'Tin học', tx: [9.0, 9.0], mid: 9.2, final: 9.0, avg: 9.1 },
+                        { subject: 'Công nghệ', tx: [8.5, 9.0], mid: 8.8, final: 8.5, avg: 8.7 },
+                        { subject: 'GDCD', tx: [9.0, 9.5], mid: 9.0, final: 9.2, avg: 9.1 }
+                    ],
+                    'GHK2': [
+                        { subject: 'Ngữ văn', tx: [8.5, 8.8], mid: 8.6 },
+                        { subject: 'Toán', tx: [9.0, 9.2], mid: 9.1 },
+                        { subject: 'Tiếng Anh', tx: [9.6, 9.8], mid: 9.7 },
+                        { subject: 'KHTN', tx: [8.5, 8.5], mid: 8.5 },
+                        { subject: 'Lịch sử & Địa lý', tx: [8.8, 8.5], mid: 8.6 },
+                        { subject: 'Tin học', tx: [9.0, 9.5], mid: 9.2 },
+                        { subject: 'Công nghệ', tx: [9.0, 8.8], mid: 8.9 },
+                        { subject: 'GDCD', tx: [9.2, 9.0], mid: 9.1 }
+                    ],
+                    'HK2': [
+                        { subject: 'Ngữ văn', tx: [8.5, 8.8], mid: 8.6, final: 8.9, avg: 8.7 },
+                        { subject: 'Toán', tx: [9.0, 9.2], mid: 9.1, final: 9.3, avg: 9.2 },
+                        { subject: 'Tiếng Anh', tx: [9.6, 9.8], mid: 9.7, final: 9.8, avg: 9.7 },
+                        { subject: 'KHTN', tx: [8.5, 8.5], mid: 8.5, final: 8.8, avg: 8.6 },
+                        { subject: 'Lịch sử & Địa lý', tx: [8.8, 8.5], mid: 8.6, final: 8.7, avg: 8.6 },
+                        { subject: 'Tin học', tx: [9.0, 9.5], mid: 9.2, final: 9.4, avg: 9.3 },
+                        { subject: 'Công nghệ', tx: [9.0, 8.8], mid: 8.9, final: 9.0, avg: 9.0 },
+                        { subject: 'GDCD', tx: [9.2, 9.0], mid: 9.1, final: 9.3, avg: 9.2 }
+                    ]
+                }
+            },
+            'HS13': {
+                name: 'NGUYỄN VĂN A',
+                className: '6D',
+                school: 'Trường THCS Hùng Vương',
+                year: '2026 - 2027',
+                avgScore: 7.8,
+                rank: 'KHÁ',
+                comment: 'Học sinh ngoan ngoãn, có tiến bộ trong học tập các môn tự nhiên, cần rèn luyện thêm kỹ năng đọc hiểu tiếng Anh.',
+                grades: {
+                    'GHK1': [
+                        { subject: 'Ngữ văn', tx: [7.5, 8.0], mid: 7.8 },
+                        { subject: 'Toán', tx: [8.0, 8.0], mid: 8.0 },
+                        { subject: 'Tiếng Anh', tx: [6.5, 7.0], mid: 6.8 },
+                        { subject: 'KHTN', tx: [7.5, 8.0], mid: 7.7 },
+                        { subject: 'Lịch sử & Địa lý', tx: [7.0, 7.5], mid: 7.2 },
+                        { subject: 'Tin học', tx: [8.0, 8.5], mid: 8.2 },
+                        { subject: 'Công nghệ', tx: [7.5, 7.5], mid: 7.5 },
+                        { subject: 'GDCD', tx: [8.0, 8.0], mid: 8.0 }
+                    ],
+                    'HK1': [
+                        { subject: 'Ngữ văn', tx: [7.5, 8.0], mid: 7.8, final: 7.6, avg: 7.7 },
+                        { subject: 'Toán', tx: [8.0, 8.0], mid: 8.0, final: 8.2, avg: 8.1 },
+                        { subject: 'Tiếng Anh', tx: [6.5, 7.0], mid: 6.8, final: 7.0, avg: 6.9 },
+                        { subject: 'KHTN', tx: [7.5, 8.0], mid: 7.7, final: 7.8, avg: 7.7 },
+                        { subject: 'Lịch sử & Địa lý', tx: [7.0, 7.5], mid: 7.2, final: 7.4, avg: 7.3 },
+                        { subject: 'Tin học', tx: [8.0, 8.5], mid: 8.2, final: 8.5, avg: 8.3 },
+                        { subject: 'Công nghệ', tx: [7.5, 7.5], mid: 7.5, final: 7.8, avg: 7.6 },
+                        { subject: 'GDCD', tx: [8.0, 8.0], mid: 8.0, final: 8.2, avg: 8.1 }
+                    ],
+                    'GHK2': [
+                        { subject: 'Ngữ văn', tx: [7.8, 8.0], mid: 7.9 },
+                        { subject: 'Toán', tx: [8.2, 8.0], mid: 8.1 },
+                        { subject: 'Tiếng Anh', tx: [7.0, 7.2], mid: 7.1 },
+                        { subject: 'KHTN', tx: [7.8, 8.0], mid: 7.9 },
+                        { subject: 'Lịch sử & Địa lý', tx: [7.5, 7.5], mid: 7.5 },
+                        { subject: 'Tin học', tx: [8.5, 8.5], mid: 8.5 },
+                        { subject: 'Công nghệ', tx: [7.8, 8.0], mid: 7.9 },
+                        { subject: 'GDCD', tx: [8.2, 8.5], mid: 8.3 }
+                    ],
+                    'HK2': [
+                        { subject: 'Ngữ văn', tx: [7.8, 8.0], mid: 7.9, final: 8.0, avg: 8.0 },
+                        { subject: 'Toán', tx: [8.2, 8.0], mid: 8.1, final: 8.3, avg: 8.2 },
+                        { subject: 'Tiếng Anh', tx: [7.0, 7.2], mid: 7.1, final: 7.5, avg: 7.3 },
+                        { subject: 'KHTN', tx: [7.8, 8.0], mid: 7.9, final: 8.1, avg: 8.0 },
+                        { subject: 'Lịch sử & Địa lý', tx: [7.5, 7.5], mid: 7.5, final: 7.8, avg: 7.6 },
+                        { subject: 'Tin học', tx: [8.5, 8.5], mid: 8.5, final: 8.8, avg: 8.6 },
+                        { subject: 'Công nghệ', tx: [7.8, 8.0], mid: 7.9, final: 8.0, avg: 8.0 },
+                        { subject: 'GDCD', tx: [8.2, 8.5], mid: 8.3, final: 8.5, avg: 8.4 }
+                    ]
+                }
+            }
+        };
+
+        let classStudents = [
+            { stt: 1, studentId: 'HS01', name: 'Hoàng Tuấn Đạt', group: 3, avg: 8.9, conduct: 'Tốt' },
+            { stt: 2, studentId: 'HS02', name: 'Trương Lâm Sương', group: 1, avg: 9.2, conduct: 'Tốt' },
+            { stt: 3, studentId: 'HS03', name: 'Lê Huyền My', group: 2, avg: 8.5, conduct: 'Tốt' },
+            { stt: 4, studentId: 'HS04', name: 'Nguyễn Công Khải', group: 3, avg: 8.0, conduct: 'Tốt' },
+            { stt: 5, studentId: 'HS05', name: 'Trần Quang Anh', group: 2, avg: 8.3, conduct: 'Tốt' },
+            { stt: 6, studentId: 'HS06', name: 'Vũ Minh Quân', group: 1, avg: 8.6, conduct: 'Tốt' },
+            { stt: 7, studentId: 'HS07', name: 'Phạm Gia Hiếu', group: 3, avg: 7.9, conduct: 'Khá' },
+            { stt: 8, studentId: 'HS08', name: 'Đỗ Trúc Nhi', group: 2, avg: 9.0, conduct: 'Tốt' },
+            { stt: 9, studentId: 'HS09', name: 'Hoàng Anh Quân', group: 1, avg: 8.2, conduct: 'Tốt' },
+            { stt: 10, studentId: 'HS10', name: 'H.T.Nguyên', group: 3, avg: 8.4, conduct: 'Tốt' },
+            { stt: 11, studentId: 'HS11', name: 'H. Ân', group: 2, avg: 8.1, conduct: 'Tốt' },
+            { stt: 12, studentId: 'HS12', name: 'Lê Hà My', group: 1, avg: 8.9, conduct: 'Tốt' },
+            { stt: 13, studentId: 'HS13', name: 'Nguyễn Văn A', group: 3, avg: 7.8, conduct: 'Khá' }
+        ];
+
+        let currentUser = null;
+        let currentTerm = 'GHK1';
+        let currentSubjectFilter = 'all';
+        let viewingStudentIdForTeacher = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const remembered = localStorage.getItem('vnsedu_session_user');
+            if (remembered) {
+                try {
+                    const parsed = JSON.parse(remembered);
+                    const validUser = accounts.find(a => a.username === parsed.username && a.status === 'active');
+                    if (validUser) {
+                        currentUser = validUser;
+                        initAppSession();
+                    }
+                } catch(e) {
+                    localStorage.removeItem('vnsedu_session_user');
+                }
+            }
+        });
+
+        function saveAccountsToStorage() {
+            localStorage.setItem('vnsedu_accounts_v2', JSON.stringify(accounts));
+        }
+
+        // Xử lý đăng nhập
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('usernameInput').value.trim();
+            const p = document.getElementById('passwordInput').value;
+            const remember = document.getElementById('rememberMe').checked;
+
+            const found = accounts.find(acc => acc.username === u && acc.passToken === encodeSecret(p));
+            const alertBox = document.getElementById('loginAlert');
+
+            if (!found) {
+                document.getElementById('loginAlertText').textContent = 'Tên đăng nhập hoặc mật khẩu không chính xác!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            if (found.status === 'locked') {
+                document.getElementById('loginAlertText').textContent = 'Tài khoản này đã bị khóa bởi Quản trị viên!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            currentUser = found;
+            viewingStudentIdForTeacher = null;
+
+            if (remember) {
+                localStorage.setItem('vnsedu_session_user', JSON.stringify({ username: found.username }));
+            } else {
+                localStorage.removeItem('vnsedu_session_user');
+            }
+
+            alertBox.style.display = 'none';
+            document.getElementById('loginForm').reset();
+            initAppSession();
+        }
+
+        function initAppSession() {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('appView').style.display = 'flex';
+
+            // Reset bộ lọc về mặc định mỗi lần đăng nhập tài khoản mới
+            currentTerm = 'GHK1';
+            currentSubjectFilter = 'all';
+            document.querySelectorAll('.term-selector .pill-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+            document.querySelectorAll('#studentSubjectList .filter-item').forEach((el, i) => el.classList.toggle('active', i === 0));
+
+            // Cập nhật thông tin Header
+            document.getElementById('headerName').textContent = currentUser.fullName;
+            const roleNameMap = { student: 'Học sinh', teacher: 'Giáo viên', admin: 'Quản trị viên' };
+            document.getElementById('headerRoleBadge').textContent = roleNameMap[currentUser.role] || currentUser.role;
+            document.getElementById('headerAvatar').textContent = currentUser.fullName.trim().split(' ').pop().charAt(0).toUpperCase();
+
+            // PHÂN QUYỀN THANH TAB:
+            // Tài khoản học sinh tuyệt đối KHÔNG có mục Giáo Viên và Quản Trị Viên
+            const tabsContainer = document.getElementById('roleTabsContainer');
+            tabsContainer.innerHTML = '';
+
+            if (currentUser.role === 'student') {
+                tabsContainer.style.display = 'none';
+                switchRoleTab('student');
+            } else if (currentUser.role === 'teacher') {
+                tabsContainer.style.display = 'flex';
+                tabsContainer.innerHTML = `
+                    <button class="tab-btn active" data-tab="teacherTab" onclick="switchRoleTab('teacher')">
+                        <i class="fa-solid fa-chalkboard-user"></i> Sổ điểm Giáo viên
+                    </button>
+                    <button class="tab-btn" data-tab="studentTab" onclick="switchRoleTab('student')">
+                        <i class="fa-solid fa-user-graduate"></i> Xem bảng điểm học sinh
+                    </button>
+                `;
+                switchRoleTab('teacher');
+            } else if (currentUser.role === 'admin') {
+                tabsContainer.style.display = 'flex';
+                tabsContainer.innerHTML = `
+                    <button class="tab-btn active" data-tab="adminTab" onclick="switchRoleTab('admin')">
+                        <i class="fa-solid fa-shield-halved"></i> Quản trị hệ thống
+                    </button>
+                    <button class="tab-btn" data-tab="teacherTab" onclick="switchRoleTab('teacher')">
+                        <i class="fa-solid fa-chalkboard-user"></i> Sổ điểm Giáo viên
+                    </button>
+                    <button class="tab-btn" data-tab="studentTab" onclick="switchRoleTab('student')">
+                        <i class="fa-solid fa-user-graduate"></i> Tra cứu bảng điểm
+                    </button>
+                `;
+                switchRoleTab('admin');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            viewingStudentIdForTeacher = null;
+            localStorage.removeItem('vnsedu_session_user');
+            document.getElementById('roleTabsContainer').innerHTML = '';
+            document.getElementById('roleTabsContainer').style.display = 'none';
+            document.getElementById('appView').style.display = 'none';
+            document.getElementById('loginView').style.display = 'flex';
+        }
+
+        function switchRoleTab(roleKey) {
+            // Chặn truy cập trái phép qua console nếu là học sinh
+            if (currentUser && currentUser.role === 'student' && roleKey !== 'student') {
+                return;
+            }
+
+            document.querySelectorAll('.role-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (roleKey === 'student') {
+                document.getElementById('studentTab').style.display = 'block';
+                const btn = document.querySelector('[data-tab="studentTab"]');
+                if (btn) btn.classList.add('active');
+                renderStudentGradeView();
+            } else if (roleKey === 'teacher') {
+                document.getElementById('teacherTab').style.display = 'block';
+                const btn = document.querySelector('[data-tab="teacherTab"]');
+                if (btn) btn.classList.add('active');
+                renderTeacherStudentTable();
+            } else if (roleKey === 'admin') {
+                document.getElementById('adminTab').style.display = 'block';
+                const btn = document.querySelector('[data-tab="adminTab"]');
+                if (btn) btn.classList.add('active');
+                renderAdminAccountsTable();
+            }
+        }
+
+        // QUẢN LÝ BẢNG ĐIỂM HỌC SINH (LIÊN KẾT CHẶT CHẼ THEO STUDENT_ID)
+        function renderStudentGradeView() {
+            let targetStudentId = 'HS01';
+            let displayName = 'HOÀNG TUẤN ĐẠT';
+
+            if (currentUser && currentUser.role === 'student') {
+                targetStudentId = currentUser.studentId || 'HS01';
+                displayName = currentUser.fullName.toUpperCase();
+            } else if (viewingStudentIdForTeacher) {
+                targetStudentId = viewingStudentIdForTeacher;
+                const stObj = classStudents.find(s => s.studentId === targetStudentId);
+                displayName = stObj ? stObj.name.toUpperCase() : targetStudentId;
+            }
+
+            // Nếu QTV tạo tài khoản học sinh mới với studentId chưa có sẵn dữ liệu chi tiết, tạo hồ sơ mặc định theo đúng tên học sinh đó
+            let dataObj = studentsData[targetStudentId];
+            if (!dataObj) {
+                dataObj = {
+                    name: displayName,
+                    className: '6D',
+                    school: 'Trường THCS Hùng Vương',
+                    year: '2026 - 2027',
+                    avgScore: 8.2,
+                    rank: 'TỐT',
+                    comment: 'Học sinh tích cực tham gia các hoạt động học tập của lớp.',
+                    grades: studentsData['HS01'].grades
+                };
+            }
+
+            document.getElementById('displayStudentTitle').textContent = `BẢNG ĐIỂM HỌC TẬP – ${displayName}`;
+            document.getElementById('displayStudentMeta').textContent = `Mã HS: ${targetStudentId} | Lớp: ${dataObj.className} | ${dataObj.school} | Năm học: ${dataObj.year}`;
+            document.getElementById('statAvgScore').textContent = dataObj.avgScore;
+            document.getElementById('statRank').textContent = dataObj.rank;
+            document.getElementById('teacherComment').textContent = dataObj.comment;
+
+            renderGradeTableRows(dataObj, currentTerm, currentSubjectFilter);
+            renderProgressBars(dataObj, currentTerm);
+        }
+
+        function renderGradeTableRows(dataObj, term, subjectFilter) {
+            const tbody = document.getElementById('gradeTableBody');
+            const theadRow = document.getElementById('tableHeaderRow');
+            tbody.innerHTML = '';
+
+            if (term === 'GHK1' || term === 'GHK2') {
+                theadRow.innerHTML = `
+                    <th>Môn học</th>
+                    <th>Kiểm tra thường xuyên (TX1, TX2)</th>
+                    <th>Điểm Giữa kỳ</th>
+                `;
+            } else {
+                theadRow.innerHTML = `
+                    <th>Môn học</th>
+                    <th>Kiểm tra thường xuyên (TX1, TX2)</th>
+                    <th>Điểm Giữa kỳ</th>
+                    <th>Điểm Cuối kỳ</th>
+                    <th>TB Môn</th>
+                `;
+            }
+
+            const termGrades = dataObj.grades[term] || [];
+            const filtered = termGrades.filter(item => subjectFilter === 'all' || item.subject.toLowerCase().includes(subjectFilter.toLowerCase()));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 20px;">Không tìm thấy dữ liệu môn học phù hợp.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                // Đảm bảo kiểm tra thường xuyên chỉ hiển thị đúng 2 con điểm
+                const txList = Array.isArray(item.tx) ? item.tx.slice(0, 2) : [item.tx, '-'];
+                const txHtml = `<div class="tx-group">
+                    <span class="score-pill score-tx">${txList[0]}</span>
+                    <span class="score-pill score-tx">${txList[1] !== undefined ? txList[1] : '-'}</span>
+                </div>`;
+
+                if (term === 'GHK1' || term === 'GHK2') {
+                    tr.innerHTML = `
+                        <td style="font-weight: 600;">${item.subject}</td>
+                        <td>${txHtml}</td>
+                        <td><span class="score-pill score-high">${item.mid}</span></td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td style="font-weight: 600;">${item.subject}</td>
+                        <td>${txHtml}</td>
+                        <td><span class="score-pill score-high">${item.mid}</span></td>
+                        <td><span class="score-pill score-high">${item.final}</span></td>
+                        <td><strong style="color: var(--blue); font-size: 15px;">${item.avg}</strong></td>
+                    `;
+                }
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderProgressBars(dataObj, term) {
+            const container = document.getElementById('progressBarsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            const termGrades = dataObj.grades[term] || [];
+            termGrades.forEach(item => {
+                const scoreVal = item.avg !== undefined ? item.avg : item.mid;
+                const percent = Math.min(100, Math.max(0, (scoreVal / 10) * 100));
+                const row = document.createElement('div');
+                row.className = 'progress-row';
+                row.innerHTML = `
+                    <span class="progress-label">${item.subject}</span>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: ${percent}%;"></div>
+                    </div>
+                    <span class="progress-val">${scoreVal}</span>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function switchTerm(termKey, btnElement) {
+            currentTerm = termKey;
+            document.querySelectorAll('.term-selector .pill-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderStudentGradeView();
+        }
+
+        function selectSubject(subName, liElement) {
+            currentSubjectFilter = subName === 'all' ? 'all' : subName;
+            document.querySelectorAll('#studentSubjectList .filter-item').forEach(el => el.classList.remove('active'));
+            liElement.classList.add('active');
+            renderStudentGradeView();
+        }
+
+        function filterSubjects() {
+            const keyword = document.getElementById('subjectSearchInput').value.toLowerCase();
+            const items = document.querySelectorAll('#studentSubjectList .filter-item');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(keyword) ? 'flex' : 'none';
+            });
+        }
+
+        // TÍNH NĂNG GIÁO VIÊN
+        function renderTeacherStudentTable() {
+            const tbody = document.getElementById('teacherStudentListBody');
+            tbody.innerHTML = '';
+            classStudents.forEach((st, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td><code>${st.studentId}</code></td>
+                    <td style="font-weight: 600;">${st.name}</td>
+                    <td>Tổ ${st.group}</td>
+                    <td><strong style="color: var(--blue);">${st.avg}</strong></td>
+                    <td><span class="score-pill ${st.conduct === 'Tốt' ? 'score-high' : 'score-mid'}">${st.conduct}</span></td>
+                    <td>
+                        <button class="action-btn" style="padding: 5px 12px; font-size: 12px;" onclick="viewStudentAsTeacher('${st.studentId}')">
+                            <i class="fa-solid fa-eye"></i> Xem điểm
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function viewStudentAsTeacher(studentId) {
+            viewingStudentIdForTeacher = studentId;
+            switchRoleTab('student');
+        }
+
+        // QUẢN LÝ TÀI KHOẢN (CHỈ DÀNH CHO QUẢN TRỊ VIÊN)
+        function renderAdminAccountsTable() {
+            const tbody = document.getElementById('adminAccountsTableBody');
+            tbody.innerHTML = '';
+            accounts.forEach(acc => {
+                const tr = document.createElement('tr');
+                const roleMap = { student: 'Học sinh', teacher: 'Giáo viên', admin: 'Quản trị viên' };
+                const statusBadge = acc.status === 'locked' ? '<span class="badge-status badge-locked">Đã khóa</span>' : '<span class="badge-status badge-active">Hoạt động</span>';
+                
+                tr.innerHTML = `
+                    <td><code>${acc.username}</code></td>
+                    <td style="font-weight: 600;">${acc.fullName}</td>
+                    <td>${roleMap[acc.role] || acc.role}</td>
+                    <td>${acc.studentId ? '<code>' + acc.studentId + '</code>' : '<span style="color:var(--text-secondary)">-</span>'}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="action-btn" style="padding: 4px 8px; font-size: 11px;" onclick="openEditAccountModal('${acc.username}')" title="Sửa / Đặt lại mật khẩu"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn" style="padding: 4px 8px; font-size: 11px;" onclick="toggleLockAccount('${acc.username}')" title="${acc.status === 'locked' ? 'Mở khóa' : 'Khóa tài khoản'}"><i class="fa-solid ${acc.status === 'locked' ? 'fa-lock-open' : 'fa-lock'}"></i></button>
+                            ${acc.username !== 'admin' ? `<button class="action-btn" style="padding: 4px 8px; font-size: 11px; color: var(--danger); border-color: rgba(239,68,68,0.3);" onclick="deleteAccount('${acc.username}')" title="Xóa tài khoản"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openCreateAccountModal() {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            document.getElementById('accountModalTitle').textContent = 'Tạo tài khoản mới';
+            document.getElementById('editOriginalUsername').value = '';
+            document.getElementById('accountForm').reset();
+            document.getElementById('accPassword').required = true;
+            document.getElementById('accConfirmPassword').required = true;
+            document.getElementById('modalAlert').style.display = 'none';
+            document.getElementById('studentIdGroup').style.display = 'block';
+            document.getElementById('accountModal').style.display = 'flex';
+        }
+
+        function openEditAccountModal(username) {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            const acc = accounts.find(a => a.username === username);
+            if (!acc) return;
+            document.getElementById('accountModalTitle').textContent = 'Chỉnh sửa & Đặt lại mật khẩu';
+            document.getElementById('editOriginalUsername').value = acc.username;
+            document.getElementById('accUsername').value = acc.username;
+            document.getElementById('accFullname').value = acc.fullName;
+            document.getElementById('accPassword').value = '';
+            document.getElementById('accConfirmPassword').value = '';
+            document.getElementById('accPassword').placeholder = 'Để trống nếu giữ nguyên mật khẩu cũ...';
+            document.getElementById('accConfirmPassword').placeholder = 'Nhập lại mật khẩu mới (nếu đổi)...';
+            document.getElementById('accPassword').required = false;
+            document.getElementById('accConfirmPassword').required = false;
+            document.getElementById('accRole').value = acc.role;
+            document.getElementById('accStudentId').value = acc.studentId || '';
+            document.getElementById('studentIdGroup').style.display = acc.role === 'student' ? 'block' : 'none';
+            document.getElementById('modalAlert').style.display = 'none';
+            document.getElementById('accountModal').style.display = 'flex';
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountModal').style.display = 'none';
+        }
+
+        function handleRoleSelectChange() {
+            const role = document.getElementById('accRole').value;
+            document.getElementById('studentIdGroup').style.display = role === 'student' ? 'block' : 'none';
+        }
+
+        function saveAccount(e) {
+            e.preventDefault();
+            if (!currentUser || currentUser.role !== 'admin') return;
+
+            const originalU = document.getElementById('editOriginalUsername').value;
+            const u = document.getElementById('accUsername').value.trim();
+            const fullName = document.getElementById('accFullname').value.trim();
+            const p = document.getElementById('accPassword').value;
+            const cp = document.getElementById('accConfirmPassword').value;
+            const role = document.getElementById('accRole').value;
+            const studentId = document.getElementById('accStudentId').value.trim();
+
+            const alertBox = document.getElementById('modalAlert');
+
+            if (role === 'student' && !studentId) {
+                document.getElementById('modalAlertText').textContent = 'Vui lòng nhập Mã liên kết hồ sơ học sinh (Student ID)!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            if (p !== cp) {
+                document.getElementById('modalAlertText').textContent = 'Mật khẩu và xác nhận mật khẩu không khớp nhau!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            const existingIndex = accounts.findIndex(a => a.username === u);
+            if (originalU === '') {
+                if (existingIndex !== -1) {
+                    document.getElementById('modalAlertText').textContent = 'Tên đăng nhập này đã tồn tại trong hệ thống!';
+                    alertBox.style.display = 'flex';
+                    return;
+                }
+                accounts.push({
+                    username: u,
+                    passToken: encodeSecret(p),
+                    fullName: fullName,
+                    role: role,
+                    studentId: role === 'student' ? studentId : '',
+                    status: 'active'
+                });
+            } else {
+                if (existingIndex !== -1 && accounts[existingIndex].username !== originalU) {
+                    document.getElementById('modalAlertText').textContent = 'Tên đăng nhập mới bị trùng với tài khoản khác!';
+                    alertBox.style.display = 'flex';
+                    return;
+                }
+                const acc = accounts.find(a => a.username === originalU);
+                if (acc) {
+                    acc.username = u;
+                    acc.fullName = fullName;
+                    if (p) acc.passToken = encodeSecret(p);
+                    acc.role = role;
+                    acc.studentId = role === 'student' ? studentId : '';
+                }
+            }
+
+            saveAccountsToStorage();
+            closeAccountModal();
+            renderAdminAccountsTable();
+        }
+
+        function toggleLockAccount(username) {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            const acc = accounts.find(a => a.username === username);
+            if (acc && acc.username !== 'admin') {
+                acc.status = acc.status === 'locked' ? 'active' : 'locked';
+                saveAccountsToStorage();
+                renderAdminAccountsTable();
+            }
+        }
+
+        function deleteAccount(username) {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            if (username === 'admin') return;
+            if (confirm(`Bạn có chắc chắn muốn xóa tài khoản "${username}" không?`)) {
+                accounts = accounts.filter(a => a.username !== username);
+                saveAccountsToStorage();
+                renderAdminAccountsTable();
+            }
+        }
+
+        // TÍNH NĂNG QUÊN MẬT KHẨU
+        function showForgotPasswordModal(e) {
+            e.preventDefault();
+            document.getElementById('fgUsername').value = '';
+            document.getElementById('fgNewPass').value = '';
+            document.getElementById('fgConfirmPass').value = '';
+            document.getElementById('forgotAlert').style.display = 'none';
+            document.getElementById('forgotSuccess').style.display = 'none';
+            document.getElementById('forgotPasswordModal').style.display = 'flex';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const u = document.getElementById('fgUsername').value.trim();
+            const p = document.getElementById('fgNewPass').value;
+            const cp = document.getElementById('fgConfirmPass').value;
+
+            const alertBox = document.getElementById('forgotAlert');
+            const successBox = document.getElementById('forgotSuccess');
+
+            if (p !== cp) {
+                successBox.style.display = 'none';
+                document.getElementById('forgotAlertText').textContent = 'Mật khẩu mới và xác nhận mật khẩu không khớp nhau!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            const acc = accounts.find(a => a.username === u);
+            if (!acc) {
+                successBox.style.display = 'none';
+                document.getElementById('forgotAlertText').textContent = 'Tên tài khoản không tồn tại trong hệ thống!';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            acc.passToken = encodeSecret(p);
+            saveAccountsToStorage();
+
+            alertBox.style.display = 'none';
+            document.getElementById('forgotSuccessText').textContent = 'Đặt lại mật khẩu thành công! Bạn có thể sử dụng mật khẩu mới để đăng nhập.';
+            successBox.style.display = 'flex';
+
+            setTimeout(() => {
+                closeForgotPasswordModal();
+            }, 2200);
+        }
+
+        // TIỆN ÍCH KHÁC
+        function togglePasswordVisibility(inputId, btnEl) {
+            const input = document.getElementById(inputId);
+            const icon = btnEl.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            localStorage.setItem('vnsedu_theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('vnsedu_theme') === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+        }
+
+        function exportCSV() {
+            let csv = '\uFEFFMôn học,Kiểm tra thường xuyên,Điểm Giữa kỳ,Điểm Cuối kỳ,TB Môn\n';
+            const rows = document.querySelectorAll('#gradeTableBody tr');
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td');
+                if (cols.length >= 2) {
+                    const data = Array.from(cols).map(c => `"${c.textContent.trim().replace(/\s+/g, ' ')}"`);
+                    csv += data.join(',') + '\n';
+                }
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'bang_diem_hoc_tap.csv';
+            link.click();
+        }
+    </script>
+</body>
+</html>
